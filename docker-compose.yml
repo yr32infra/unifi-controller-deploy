@@ -1,0 +1,42 @@
+version: '3.9'
+services:
+  unifi:
+    image: linuxserver/unifi-controller:7.4.162@sha256:59a5150c0d202492eb799d31d8530af64f29867aca72a59f00a928dbc13aff1e
+    hostname: unifi
+    container_name: unifi__unifi
+    restart: unless-stopped
+
+    environment:
+      PUID: 1000
+      PGID: 1000
+
+    ports:
+      - '3478:3478/udp'   # STUN
+      - '10001:10001/udp' # Device Discovery
+      - '1900:1900/udp'   # Make application discoverble on L2 Network
+      - '8080:8080'       # Device Communication
+      - '8443:8443'       # Web interface
+      - '8880:8880'       # Guest hotspot (HTTP)
+      - '8843:8843'       # Guest hotspot (HTTPS)
+
+    volumes:
+      - type: volume
+        source: unifi_data
+        target: /config
+
+    networks:
+      - default
+
+    deploy:
+      resources:
+        limits:
+          memory: 2048m
+
+
+volumes:
+  unifi_data:
+    name: unifi__unifi_data
+
+networks:
+  default:
+    name: unifi__default
