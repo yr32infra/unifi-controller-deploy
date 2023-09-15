@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   unifi:
-    image: linuxserver/unifi-controller:7.4.162@sha256:59a5150c0d202492eb799d31d8530af64f29867aca72a59f00a928dbc13aff1e
+    image: linuxserver/unifi-controller:7.5.174@sha256:515035f52da1ed6dd9a58d577cb48f34d1289b5169c71f97ba6667f413e16cbd
     hostname: unifi
     container_name: unifi__unifi
     restart: unless-stopped
