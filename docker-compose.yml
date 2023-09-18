@@ -1,28 +1,51 @@
 version: '3.9'
 services:
+  mongo:
+    image: mongo:6.0@sha256:f462722e606fe097ad00c0d39f97680ee050b90df43e1484543c2a31cb61b039
+    hostname: mongo
+    container_name: unifi__mongo
+    restart: unless-stopped
+
+    volumes:
+      - type: volume
+        source: mongo_data
+        target: /data/db
+
+    command: --wiredTigerCacheSizeGB 1
+
+    deploy:
+      resources:
+        limits:
+          memory: 2048m
+
   unifi:
-    image: linuxserver/unifi-controller:7.4.162@sha256:59a5150c0d202492eb799d31d8530af64f29867aca72a59f00a928dbc13aff1e
+    image: goofball222/unifi:7.4@sha256:635def9ce2bf577427a3f15315f90bc1e8b0bdb713a8a8340872ef2e99b6ef98
     hostname: unifi
     container_name: unifi__unifi
     restart: unless-stopped
 
     environment:
-      PUID: 1000
-      PGID: 1000
+      - TZ=JST
+      - DB_MONGO_LOCAL=false
+      - DB_MONGO_URI=mongodb://mongo:27017/unifi
+      - STATDB_MONGO_URI=mongodb://mongo:27017/unifi_stat
+      - UNIFI_DB_NAME=unifi
+
+    links:
+      - mongo
 
     ports:
       - '3478:3478/udp'   # STUN
-      - '10001:10001/udp' # Device Discovery
-      - '1900:1900/udp'   # Make application discoverble on L2 Network
       - '8080:8080'       # Device Communication
       - '8443:8443'       # Web interface
       - '8880:8880'       # Guest hotspot (HTTP)
       - '8843:8843'       # Guest hotspot (HTTPS)
+      - '10001:10001/udp' # Device Discovery
 
     volumes:
       - type: volume
         source: unifi_data
-        target: /config
+        target: /usr/lib/unifi
 
     networks:
       - default
@@ -35,7 +58,9 @@ services:
 
 volumes:
   unifi_data:
-    name: unifi__unifi_data
+    name: unifi__unifi_data_goofball
+  mongo_data:
+    name: unifi__mongo_data
 
 networks:
   default:
