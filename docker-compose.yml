@@ -19,7 +19,7 @@ services:
           memory: 2048m
 
   unifi:
-    image: goofball222/unifi:7.4@sha256:f90bcb15fba342f133b94170c23eaeaed0ce75ec65c6b2e701f4e297ce81e1e8
+    image: goofball222/unifi:7.4@sha256:2ae686501b4b96af358dcecc1f345620f905ae305f985f053bcfac90678c9b28
     hostname: unifi
     container_name: unifi__unifi
     restart: unless-stopped
