@@ -19,7 +19,7 @@ services:
           memory: 2048m
 
   unifi:
-    image: goofball222/unifi:8.0@sha256:ab5defb13f64ba7da80f4417e5157d33ac2c2a4c0ad27f8ad9cda921e2f0c84b
+    image: goofball222/unifi:8.0.26@sha256:ab5defb13f64ba7da80f4417e5157d33ac2c2a4c0ad27f8ad9cda921e2f0c84b
     hostname: unifi
     container_name: unifi__unifi
     restart: unless-stopped
@@ -43,9 +43,22 @@ services:
       - '10001:10001/udp' # Device Discovery
 
     volumes:
+      - type: bind
+        source: /etc/localtime
+        target: /etc/localtime
+        read_only: true
+
+      - type: volume
+        source: unifi_cert
+        target: /usr/lib/unifi/cert
+
       - type: volume
         source: unifi_data
-        target: /usr/lib/unifi
+        target: /usr/lib/unifi/data
+
+      - type: volume
+        source: unifi_logs
+        target: /usr/lib/unifi/logs
 
     networks:
       - default
@@ -57,8 +70,15 @@ services:
 
 
 volumes:
+  unifi_logs:
+    name: unifi__unifi_logs
+
+  unifi_cert:
+    name: unifi__unifi_cert
+
   unifi_data:
-    name: unifi__unifi_data_goofball
+    name: unifi__unifi_data
+
   mongo_data:
     name: unifi__mongo_data
 
