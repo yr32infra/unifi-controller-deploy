@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   mongo:
-    image: mongo:7.0@sha256:8ff7333c6a9fbc00597fcce4c836e8bcc6b29fd34d49259479c43174e32d72be
+    image: mongo:8.0@sha256:443df9f5039be18e9674d04c1e712de3cfb675f1f4b9dcac55a9de0b48b4a0c1
     hostname: mongo
     container_name: unifi__mongo
     restart: unless-stopped
